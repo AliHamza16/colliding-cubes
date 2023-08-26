@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="style.css" />
+        <title>Colliding Cubes</title>
+    </head>
+    <body>
+        <canvas id="canvas"></canvas>
+        <div id="tools">
+            <div class="section-1">
+                collusions: &nbsp;<span id="collusion-count"> 0</span>
+            </div>
+            <hr />
+            <span
+                style="
+                    text-align: center;
+                    margin-top: 1em;
+                    color: rgb(76, 76, 216);
+                "
+                >L</span
+            >
+            <div class="section-2">
+                <input
+                    type="range"
+                    id="cube1-mass"
+                    name="cube1-mass"
+                    min="0"
+                    max="4"
+                    step="1"
+                    value="0"
+                />
+                <span>mass: 1</span>
+            </div>
+            <hr />
+            <span
+                style="
+                    text-align: center;
+                    margin-top: 1em;
+                    color: rgb(60, 60, 249);
+                "
+                >K</span
+            >
+            <div class="section-3">
+                <span>mass: 1</span>
+            </div>
+            <hr />
+            <div class="section-4">
+                <button
+                    data-start
+                    style="
+                        background-color: rgb(48, 192, 103);
+                        padding: 0.5em 0.3em;
+                        border-radius: 10px;
+                        font-weight: bold;
+                    "
+                >
+                    START
+                </button>
+                <button
+                    data-reset
+                    style="
+                        background-color: rgb(192, 48, 48);
+                        padding: 0.5em 0.3em;
+                        border-radius: 10px;
+                        font-weight: bold;
+                        margin-top: 1em;
+                    "
+                >
+                    RESET
+                </button>
+            </div>
+        </div>
+        <script src="index.js" type="module"></script>
+    </body>
+</html>
