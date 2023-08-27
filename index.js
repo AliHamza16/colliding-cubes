@@ -8,13 +8,16 @@ const collusion_count_el = document.querySelector('#collusion-count');
 const slider = document.querySelector('input#cube1-mass');
 const ctx = canvas.getContext('2d');
 
+let slider_value = 0;
+
 slider.addEventListener('input', (e) => {
     if (animating) return;
-    cube2.mass = 100 ** Number(e.target.value);
+    cube2.mass = 10 ** Number(e.target.value);
     document.querySelector(
-        '#tools > .section-2 > span',
+        '#tools > .section-2 > span[data-mass]',
     ).innerText = `mass: ${cube2.mass}`;
-    cube_velocities[1] = -1 / 3 ** Number(e.target.value);
+    slider_value = e.target.value;
+    document.querySelector('#tools > .section-4 > button[data-reset]').click();
 });
 
 document
@@ -30,31 +33,39 @@ document
         canvas.height = window.innerHeight;
         canvas.width = window.innerWidth * 0.8;
         tools.style.width = `${window.innerWidth - canvas.width}px`;
+        cube_velocities = [0, -1 / 3 ** slider_value];
 
         const wall = new Wall(10, canvas.height * 0.4, 50, canvas.height * 0.6);
         wall.draw(ctx);
 
         const cubeSize = 50;
         cube1.update(
-            wall.x + wall.w + 150,
+            wall.x + wall.w + -cube_velocities[1] * 200,
             canvas.height - cubeSize,
             cubeSize,
             cubeSize,
         );
         cube1.draw(ctx, 'blue');
         cube2.update(
-            cube1.x + cube1.w + 100,
+            cube1.x + cube1.w + -cube_velocities[1] * 200,
             canvas.height - cubeSize,
             cubeSize,
             cubeSize,
         );
         cube2.draw(ctx, 'rgb(0, 0, 167)');
-        cube_velocities = [0, -1];
         collusion_count = 0;
         collusion_count_el.innerText = collusion_count;
+        document.querySelector(
+            '#tools > .section-2 > span[data-velocity]',
+        ).innerText = `velocity: ${cube_velocities[0] < 0 ? '-' : ' '}${
+            cube_velocities[0] < 0 ? -cube_velocities[0] : cube_velocities[0]
+        }`;
+        document.querySelector(
+            '#tools > .section-3 > span[data-velocity]',
+        ).innerText = `velocity: ${cube_velocities[1]}`;
     });
 
-let cube_velocities = [0, -1];
+let cube_velocities = [0, -1 / 3 ** slider_value];
 let collusion_count = 0;
 let animating = false;
 
@@ -74,7 +85,7 @@ wall.draw(ctx);
 const cubeSize = 50;
 
 const cube1 = new Cube(
-    wall.x + wall.w + 150,
+    wall.x + wall.w + -cube_velocities[1] * 200,
     canvas.height - cubeSize,
     cubeSize,
     cubeSize,
@@ -83,7 +94,7 @@ const cube1 = new Cube(
 );
 cube1.draw(ctx, 'blue');
 const cube2 = new Cube(
-    cube1.x + cube1.w + 100,
+    cube1.x + cube1.w + -cube_velocities[1] * 200,
     canvas.height - cubeSize,
     cubeSize,
     cubeSize,
@@ -97,8 +108,10 @@ setInterval(() => {
     canvas.height = window.innerHeight;
     canvas.width = window.innerWidth * 0.8;
     tools.style.width = `${window.innerWidth - canvas.width}px`;
+
     wall.draw(ctx);
-    cube1.x = cube1.x + cube_velocities[0];
+    cube1.x += cube_velocities[0];
+
     cube1.draw(ctx, 'blue');
     cube2.x = cube2.x + cube_velocities[1];
     cube2.draw(ctx, 'rgb(0, 0, 167)');
@@ -117,4 +130,12 @@ setInterval(() => {
         collusion_count++;
         collusion_count_el.innerText = collusion_count;
     }
+    document.querySelector(
+        '#tools > .section-2 > span[data-velocity]',
+    ).innerHTML = `velocity: ${cube_velocities[0] < 0 ? '-' : '&nbsp;'}${
+        cube_velocities[0] < 0 ? -cube_velocities[0] : cube_velocities[0]
+    }`;
+    document.querySelector(
+        '#tools > .section-3 > span[data-velocity]',
+    ).innerText = `velocity: ${cube_velocities[1]}`;
 }, 0);
